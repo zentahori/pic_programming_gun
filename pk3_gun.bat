@@ -68,9 +68,9 @@ rem ----- Search for mplab_ipe cli -----
 :cmd_search (
     pushd C:\
     for /F "usebackq delims=" %%i in (`dir /A-D /s /b %TARGET_CMD%`) do (
-        set ICD3CMD="%%i"
+        set cli_cmd="%%i"
     )
-    echo %ICD3CMD% was found.
+    echo %cli_cmd% was found.
     pushd %0\..
     exit /b 0
 )
@@ -122,9 +122,8 @@ rem ------ Append the used firmware to the list ------
 
 rem ----- Program writing routine -----
 :write_firmware (
-    rem echo path is %1
-    rem %ICD3CMD% -P16LF1938 -E
-    %ICD3CMD% -P16LF1938 -F%1 -M
+    rem %cli_cmd% -P16LF1938 -E
+    %cli_cmd% -P16LF1938 -F%1 -M -V3.3
     if Not !errorlevel!==0 exit /b -1
     exit /b 0
 )
