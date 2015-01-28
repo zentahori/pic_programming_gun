@@ -17,6 +17,7 @@ call :get_arg %1
 if %errorlevel%==-1 exit /b 0
 
 call :cmd_search
+if %errorlevel%==-1 exit /b 0
 call :read_used_list
 
 for /F "usebackq delims=" %%j in (`dir /A-D /s /b %target_dir%\*.hex`) do (
@@ -70,6 +71,13 @@ rem ----- Search for mplab_ipe cli -----
     for /F "usebackq delims=" %%i in (`dir /A-D /s /b %TARGET_CMD%`) do (
         set cli_cmd="%%i"
     )
+
+    if "%cli_cmd%" EQU "" (
+        echo %TARGET_CMD% is not found.
+        pushd %0\..
+        exit /b -1
+    )
+
     echo %cli_cmd% was found.
     pushd %0\..
     exit /b 0
@@ -142,6 +150,7 @@ rem ----- Start Message -----
 
 rem ----- End Message -----
 :end_message (
+    echo;
     echo #######################################################
     echo Writing the firmware is done. Replace this pic device. 
     echo #######################################################
